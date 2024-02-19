@@ -57,13 +57,19 @@ country_event = {
 				downgrade_buildings_of_type = building_fortress
 				# disable_building = building_planetary_shield_generator
 				ruin_building = building_planetary_shield_generator
-				add_planet_devastation = 15
+				
 				set_owner = event_target:t_new_owner
 				set_owner = event_target:t_prev_owner
-	
-				add_modifier = {
-					modifier = ipr_sabotaged
-					months = 3
+
+				if = {
+					limit = {
+						NOT = { has_modifier = ipr_sabotaged }
+					}
+					add_planet_devastation = 15
+					add_modifier = {
+						modifier = ipr_sabotaged
+						months = 3
+					}
 				}
 			}
 		}
