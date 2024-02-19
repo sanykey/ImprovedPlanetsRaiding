@@ -1,0 +1,160 @@
+namespace = ipr
+
+# on_planet_occupied
+# Root = Planet
+# From = Planet Owner
+# FromFrom = Planet Controller (the one occupying)
+planet_event = {
+	id = ipr.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FromFrom = {
+			has_edict = ipr_edict
+		}
+	}
+
+	immediate = {
+		root = {
+			save_event_target_as = t_planet
+		}
+
+		from = {
+			save_event_target_as = t_prev_owner
+		}
+
+		FromFrom = {
+			if = {
+				limit = {
+					has_edict = ipr_edict
+					event_target:t_planet = {
+						has_planet_flag = ipr_had_ground_combat
+					}
+				}
+				save_event_target_as = t_new_owner
+				country_event = { id = ipr.2 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ipr.2
+	is_triggered_only = yes
+	title = "ipr.2.title"
+	desc = "ipr.2.desc"
+
+
+	option = {
+		name = ipr.2.occupy
+	}
+
+	option = {
+		name = ipr.2.sabotage
+		hidden_effect = {
+			event_target:t_planet = {
+				downgrade_buildings_of_type = building_fortress
+				# disable_building = building_planetary_shield_generator
+				ruin_building = building_planetary_shield_generator
+				add_planet_devastation = 15
+				set_owner = event_target:t_new_owner
+				set_owner = event_target:t_prev_owner
+	
+				add_modifier = {
+					modifier = ipr_sabotaged
+					months = 3
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = ipr.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			every_owned_planet = {
+				remove_planet_flag = ipr_slaves_checkpoint
+			}
+			set_country_flag = ipr_slaves_checkpoint_saved
+		}
+
+		set_planet_flag = ipr_slaves_checkpoint
+	}
+}
+
+planet_event = {
+	id = ipr.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			every_owned_planet = {
+				remove_planet_flag = ipr_slaves_checkpoint
+			}
+			remove_country_flag = ipr_slaves_checkpoint_saved
+		}
+	}
+}
+
+pop_event = {
+	id = ipr.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_country_flag = ipr_slaves_checkpoint_saved
+		}
+	}
+
+	immediate = {
+		save_event_target_as = t_pop
+		owner = {
+			random_owned_planet = {
+				limit = {
+					has_planet_flag = ipr_slaves_checkpoint
+				}
+				save_event_target_as = t_planet
+			}
+		}
+
+		if = {
+			limit = {
+				exists = event_target:t_planet
+			}
+			resettle_pop = { pop = event_target:t_pop planet = event_target:t_planet }
+		} else = {
+			owner = {
+				remove_country_flag = ipr_slaves_checkpoint_saved
+			}
+		}
+	}
+}
+
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+country_event = {
+	id = ipr.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_edict = ipr_edict
+	}
+
+	immediate = {
+		FromFrom = {
+			set_timed_planet_flag = {
+				flag = ipr_had_ground_combat
+				days = 3
+			}
+		}
+	}
+}

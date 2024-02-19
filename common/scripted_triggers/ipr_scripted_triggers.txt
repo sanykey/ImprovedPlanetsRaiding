@@ -1,0 +1,9 @@
+ipr_has_raiding_bombardment_stance = {
+	OR = {
+		has_ascension_perk = ap_nihilistic_acquisition
+		has_valid_civic = civic_barbaric_despoilers
+		has_origin = origin_slavers
+		has_origin = origin_khan_successor
+		is_country_type = debt_collectors
+	}
+}

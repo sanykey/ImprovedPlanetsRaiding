@@ -1,0 +1,15 @@
+ipr_edict = {
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = edicts
+	}
+
+	potential = {
+		is_ai = no
+		ipr_has_raiding_bombardment_stance = yes
+	}
+
+	ai_weight = {
+		weight = 0	
+	}	
+}
