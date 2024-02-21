@@ -57,9 +57,24 @@ country_event = {
 				downgrade_buildings_of_type = building_fortress
 				# disable_building = building_planetary_shield_generator
 				ruin_building = building_planetary_shield_generator
+
+				if = {
+					limit = {
+						is_capital = yes
+					}
+					set_planet_flag = ipr_is_capital
+				}
 				
 				set_owner = event_target:t_new_owner
 				set_owner = event_target:t_prev_owner
+
+				if = {
+					limit = {
+						has_planet_flag = ipr_is_capital
+					}
+					remove_planet_flag = ipr_is_capital
+					set_capital = yes
+				}
 
 				if = {
 					limit = {
